@@ -19,13 +19,9 @@ public class ComponentWithCaching {
 
     public String getDefaultData() {
         Cache redisCache = cacheManager.getCache("redis");
-        Cache.ValueWrapper existing = redisCache.get(DEFAULT_REQUEST);
-        if (existing != null) {
-            return (String) existing.get();
-        }
-        String fetched = getData(DEFAULT_REQUEST);
-        redisCache.put(DEFAULT_REQUEST, fetched);
-        return fetched;
+        return redisCache.get(
+                DEFAULT_REQUEST, () -> getData(DEFAULT_REQUEST)
+        );
     }
 
     @Cacheable(cacheNames = "redis")
@@ -35,14 +31,10 @@ public class ComponentWithCaching {
 
     public String getDefaultDataWithParam() {
         Cache redisCache = cacheManager.getCache("redis");
-        String cacheKey = DEFAULT_REQUEST + DEFAULT_REQUEST;
-        Cache.ValueWrapper existing = redisCache.get(cacheKey);
-        if (existing != null) {
-            return (String) existing.get();
-        }
-        String fetched = getDataWithParameter(DEFAULT_REQUEST, DEFAULT_REQUEST);
-        redisCache.put(cacheKey, fetched);
-        return fetched;
+        return redisCache.get(
+                DEFAULT_REQUEST + DEFAULT_REQUEST,
+                () -> getDataWithParameter(DEFAULT_REQUEST, DEFAULT_REQUEST)
+        );
     }
 
     @Cacheable(cacheNames = "redis", key = "#request + #param")
