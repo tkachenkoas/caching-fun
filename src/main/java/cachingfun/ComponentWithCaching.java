@@ -45,7 +45,7 @@ public class ComponentWithCaching {
         return fetched;
     }
 
-    @Cacheable(cacheNames = "redis")
+    @Cacheable(cacheNames = "redis", key = "#request + #param")
     public String getDataWithParameter(String request, String param) {
         return remoteEndpoint.fetchData(request);
     }
