@@ -10,7 +10,7 @@ public class ComponentWithCaching {
     @Autowired
     private RemoteEndpoint remoteEndpoint;
 
-    @Cacheable
+    @Cacheable(cacheNames = "redis")
     public String getData(String request) {
         return remoteEndpoint.fetchData(request);
     }

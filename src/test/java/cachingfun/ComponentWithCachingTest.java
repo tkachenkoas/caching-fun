@@ -26,4 +26,19 @@ class ComponentWithCachingTest {
                 .isEqualTo("pong");
     }
 
+    @Test
+    void cachingTest() {
+        when(mockEndpoint.fetchData("ping2"))
+                .thenReturn("pong2");
+
+        assertThat(underTest.getData("ping2"))
+                .isEqualTo("pong2");
+
+        when(mockEndpoint.fetchData("ping2"))
+                .thenReturn("other pong 2");
+
+        assertThat(underTest.getData("ping2"))
+                .isEqualTo("pong2");
+    }
+
 }
