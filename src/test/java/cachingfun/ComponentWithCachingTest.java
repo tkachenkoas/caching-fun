@@ -60,4 +60,19 @@ class ComponentWithCachingTest {
                 .isEqualTo("pong");
     }
 
+    @Test
+    void defaultDataCachingTrickyTest() {
+        when(mockEndpoint.fetchData("DEFAULT_REQUEST"))
+                .thenReturn("pong");
+
+        assertThat(underTest.getData("DEFAULT_REQUEST"))
+                .isEqualTo("pong");
+
+        when(mockEndpoint.fetchData("DEFAULT_REQUEST"))
+                .thenReturn("other pong");
+
+        assertThat(underTest.getDefaultData())
+                .isEqualTo("pong");
+    }
+
 }
