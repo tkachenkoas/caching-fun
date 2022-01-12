@@ -75,4 +75,20 @@ class ComponentWithCachingTest {
                 .isEqualTo("pong");
     }
 
+    @Test
+    void defaultDataWithParameterCachingTrickyTest() {
+        when(mockEndpoint.fetchData("DEFAULT_REQUEST"))
+                .thenReturn("pong");
+
+        assertThat(underTest.getDataWithParameter("DEFAULT_REQUEST", "DEFAULT_REQUEST"))
+                .isEqualTo("pong");
+
+        // assertThat(underTest.getDefaultDataWithParam()).isEqualTo("pong");
+        when(mockEndpoint.fetchData("DEFAULT_REQUEST"))
+                .thenReturn("other pong");
+
+        assertThat(underTest.getDefaultDataWithParam())
+                .isEqualTo("pong");
+    }
+
 }

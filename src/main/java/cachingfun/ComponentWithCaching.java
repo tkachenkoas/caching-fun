@@ -33,4 +33,21 @@ public class ComponentWithCaching {
         return remoteEndpoint.fetchData(request);
     }
 
+    public String getDefaultDataWithParam() {
+        Cache redisCache = cacheManager.getCache("redis");
+        String cacheKey = DEFAULT_REQUEST + DEFAULT_REQUEST;
+        Cache.ValueWrapper existing = redisCache.get(cacheKey);
+        if (existing != null) {
+            return (String) existing.get();
+        }
+        String fetched = getDataWithParameter(DEFAULT_REQUEST, DEFAULT_REQUEST);
+        redisCache.put(cacheKey, fetched);
+        return fetched;
+    }
+
+    @Cacheable(cacheNames = "redis")
+    public String getDataWithParameter(String request, String param) {
+        return remoteEndpoint.fetchData(request);
+    }
+
 }
