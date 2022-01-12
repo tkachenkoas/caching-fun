@@ -2,6 +2,7 @@ package cachingfun;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,8 +13,12 @@ public class ComponentWithCaching {
     @Autowired
     private RemoteEndpoint remoteEndpoint;
 
+    @Lazy
+    @Autowired
+    private ComponentWithCaching self;
+
     public String getDefaultData() {
-        return getData(DEFAULT_REQUEST);
+        return self.getData(DEFAULT_REQUEST);
     }
 
     @Cacheable(cacheNames = "redis")
